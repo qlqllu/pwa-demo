@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service worker demo</title>
+
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+<body>
+  <div><input type="button" onclick="updateCache()" value="Clear Cache"></div>
+
+  <img src="demo-image.png">
+
+  <div>
+    <div><input type="button" onclick="getCity()" value="Get cities that start with A"></div>
+    <div id="result"></div>
+  </div>
+
+  <script type="text/javascript">
+    var workerReg;
+
+    function getCity(){
+      fetch('http://sampleserver5.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer/0/query?f=json&where=city_name+like+%27A%25%27').then(function(response){
+        return response.text();
+      }).then(function(text){
+        document.getElementById('result').innerHTML = text;
+      });
+    }
+
+    function updateCache(){
+      caches.delete('my-site-cache-v2');
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+          // Registration was successful
+          workerReg = registration;
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
