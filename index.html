@@ -23,7 +23,7 @@
     var workerReg;
 
     function getCity(){
-      fetch('http://sampleserver5.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer/0/query?f=json&where=city_name+like+%27A%25%27').then(function(response){
+      fetch('https://sampleserver5.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer/0/query?f=json&where=city_name+like+%27A%25%27').then(function(response){
         return response.text();
       }).then(function(text){
         document.getElementById('result').innerHTML = text;
